@@ -1,0 +1,160 @@
+\section{L0-penalized problems}
+
+\begin{frame}{Sparse optimization}
+    \begin{tikzpicture}[remember picture,overlay]
+        \onslide<+-> {
+            \draw [ultra thick,<->] ($(current page.north)+(-2.2,-0.32\textheight)$) -- ($(current page.north)+(2.2,-0.32\textheight)$) node (arrow) [midway] {};
+            \node at ($(arrow.north)+(0,0.1)$) {\textbf{Sparse optimization}};
+            \node [text width=0.3\textwidth] at ($(current page.north)+(-4,-0.3\textheight)$) (obs) {
+                \begin{blockone}{}
+                    \centering
+                    \textbf{Minimize a loss}
+                \end{blockone}
+            };
+            \node [text width=.3\textwidth] at ($(current page.north)+(4,-0.3\textheight)$) (dic) {
+                \begin{blocktwo}{}
+                    \centering
+                    \textbf{Sparse solution}
+                \end{blocktwo}
+            };
+            \node at ($(arrow.south)+(0,-0.6)$) (applications) {
+                \begin{varwidth}{\linewidth}
+                    \centering
+                    \scriptsize{Machine Learning} \\
+                    \scriptsize{Signal processing} \\
+                    \scriptsize{Network design} \\
+                    \scriptsize{...}
+                \end{varwidth}
+            };
+        };
+        %
+        %
+        %
+        \onslide<+-> {
+            \node [text width=.45\textwidth] at ($(current page.north)+(0,-0.6\textheight)$) (problem) {
+                \begin{blockthree}{$\ell_0$-penalized problem}
+                    \centering
+                    $\min_{\pv} \ \datafunc(\pv) + \reg \norm{\pv}{0} + \regfunc(\pv)$
+                \end{blockthree}
+            };
+            \node [text width=.45\textwidth] at ($(current page.north)+(1.5,-0.82\textheight)$) (problem) {
+                \begin{itemize}[nosep]
+                    \item[$\datafunc(\cdot)$]: loss
+                    \item[$\norm{\cdot}{0}$]: sparsity
+                    \item[$\reg$]: trade-off
+                    \item[$\regfunc(\cdot)$]: modelling
+                \end{itemize}
+            };
+        }
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Contributions}
+    \begin{tikzpicture}[remember picture,overlay]
+        \onslide {
+            \node<+-> [text width=.45\textwidth] at ($(current page.north)+(0,-0.25\textheight)$) (problem) {
+                \begin{blockthree}{L0-penalized problem}
+                \centering
+                $\min_{\pv} \ \datafunc(\pv) + \reg \norm{\pv}{0} + \regfunc(\pv)$
+                \end{blockthree}
+            };
+            \node at ($(problem.south)+(0,-0.2)$) (problem) {\textbf{NP-hard}};
+        }
+        \node<+-> [text width=.3\textwidth, anchor=north] at ($(problem.south)+(-4,-0.4)$) (mip) {
+            \begin{blockzero}{Generic approaches}
+            \centering
+            \scriptsize
+            ~\\
+            \begin{itemize}[leftmargin=*,label=$\blacktriangleright$,nosep]
+                \item D. Bertsimas \hfill (2016)
+                \item S. Bourguignon \hfill (2017)
+                \item A. Atamtürk \hfill (2020)
+                \item D. Bertsimas \hfill (2021)
+                \item C. Kanzow \hfill (2022)
+                \item ...
+            \end{itemize}
+            ~\\
+            \emphone{
+                \begin{itemize}[leftmargin=*,label=\ding{51},nosep]
+                    \item Off-the-shelf MIP solver
+                \end{itemize}
+            }
+            \emphtwo{
+                \begin{itemize}[leftmargin=*,label=\ding{55},nosep]
+                    \item Slow
+                \end{itemize}
+            }
+            \emphone{
+                \begin{itemize}[leftmargin=*,label=\ding{51},nosep]
+                    \item Arbitrary $\datafunc(\cdot)$ and $\regfunc(\cdot)$
+                \end{itemize}
+            }
+            \end{blockzero}
+        };
+        \node<+-> [text width=.3\textwidth, anchor=north] at ($(problem.south)+(0,-0.4)$) (bnb) {
+            \begin{blockzero}{Tailored approaches}
+            \centering
+            \scriptsize
+            ~\\
+            \begin{itemize}[leftmargin=*,label=$\blacktriangleright$,nosep]
+                \item R. Ben Mhenni \hfill (2021)
+                \item H. Hazimeh \hfill (2021)
+                \item G. Samain \hfill (2022)
+                \item A. Olama \hfill (2022)
+                \item A. Atamtürk \hfill (2022)
+                \item ...
+            \end{itemize}
+            ~\\
+            \emphone{
+                \begin{itemize}[leftmargin=*,label=\ding{51},nosep]
+                    \item Branch-and-Bound
+                \end{itemize}
+            }
+            \emphone{
+                \begin{itemize}[leftmargin=*,label=\ding{51},nosep]
+                    \item Fast
+                \end{itemize}
+            }
+            \emphtwo{
+                \begin{itemize}[leftmargin=*,label=\ding{55},nosep]
+                    \item Specific $\datafunc(\cdot)$ and $\regfunc(\cdot)$
+                \end{itemize}
+            }
+            \end{blockzero}
+        };
+        \node<+-> [text width=.3\textwidth, anchor=north] at ($(problem.south)+(4,-0.4)$) (contrib) {
+            \begin{blockzero}{Contribution}
+            \centering
+            \scriptsize
+            ~\\
+            \begin{itemize}[leftmargin=*,label=$\blacktriangleright$,nosep]
+                \item This talk \hfill (2023)
+                \item Extended paper \hfill (202?)
+            \end{itemize}
+            \begin{itemize}[leftmargin=*,nosep]
+                \item 
+                \item 
+                \item
+                \item
+            \end{itemize}
+            ~\\
+            \emphone{
+                \begin{itemize}[leftmargin=*,label=\ding{51},nosep]
+                    \item Branch-and-Bound
+                \end{itemize}
+            }
+            \emphone{
+                \begin{itemize}[leftmargin=*,label=\ding{51},nosep]
+                    \item Fast
+                \end{itemize}
+            }
+            \emphone{
+                \begin{itemize}[leftmargin=*,label=\ding{51},nosep]
+                    \item Arbitrary $\datafunc(\cdot)$ and $\regfunc(\cdot)$
+                \end{itemize}
+            }
+            \end{blockzero}
+        };
+    \end{tikzpicture}
+\end{frame}
+  

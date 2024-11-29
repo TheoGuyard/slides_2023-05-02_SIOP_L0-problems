@@ -1,0 +1,31 @@
+\begin{frame}[standout]
+    \begin{tikzpicture}[remember picture,overlay]
+        \node at ($(current page.north)+(0,-2)$) {Question time};
+        \node at ($(current page.north)+(0,-3)$) {
+            \includegraphics[width=30pt]{imgs/nerd_face.png}
+        };  
+        %
+        %
+        %
+        \draw[ultra thick, fill=white] (-0.29\textwidth,-0.23\textwidth) rectangle (0.29\textwidth,-0.45\textheight);
+        \node [text width=0.7\textwidth] at ($(current page.north)+(0,-0.7\textwidth)$) (repo) {
+            \begin{textblock}{1}(-0.15,-0.025)
+                \centering
+                \LARGE{TheoGuyard/\bf{El0ps.jl}}
+            \end{textblock}
+            \begin{textblock}{1}(-0.19,0.055)
+                \centering
+                \scriptsize{\textcolor{gray}{An Exact L0-penalized Problem Solver}}
+            \end{textblock}
+            \begin{textblock}{1}(0.59,0.06)
+                \includegraphics[width=0.04\textwidth]{imgs/github.png}
+            \end{textblock}
+        };
+        %
+        %
+        %
+        \node at ($(current page.north)+(0,-0.6\textwidth)$) {
+            \includegraphics[width=20pt]{imgs/point_down.png}
+        };
+    \end{tikzpicture}
+\end{frame}

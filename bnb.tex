@@ -1,0 +1,213 @@
+\section{Branch-and-Bound}
+
+\begin{frame}{Algorithmic concept}
+    \begin{tikzpicture}[remember picture,overlay]
+        \onslide<+-> {
+            \node (concept) at ($(current page.north)+(0,-0.2\textwidth)$) {\textit{``Enumerate all candidate solutions and discard sub-optimal ones.''}};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node (path0) at ($(current page.north)+(1.5,-3.5)$) {};
+            \node (path1) at ($(path0)+(2,0)$) {};
+            \node (path2) at ($(path0)+(3,-1)$) {};
+            \node (path3) at ($(path0)+(2,-3)$) {};
+            \node (path4) at ($(path0)+(1,-1.5)$) {};
+            \node (path5) at ($(path0)+(0,-1)$) {};
+            \path[ultra thick,draw,use Hobby shortcut,closed=true] (path0)..(path1)..(path2)..(path3)..(path4)..(path5);
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \draw[ultra thick,dashed] (path2) -- (path4);
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \draw[ultra thick,dashed] ($(path4)+(0.75,0.2)$)-- ($(path1)+(-1,0.4)$);
+            \draw[ultra thick,dashed] ($(path4)+(1,0.2)$) -- ($(path3)+(0.5,0)$);
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node (N5cross) at ($(path0)+(1.75,-2)$) {\textcolor{purple}{\LARGE\ding{55}}}; 
+            \node (N6cross) at ($(path0)+(2.75,-2)$) {\textcolor{purple}{\LARGE\ding{55}}}; 
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=\textwidth] (principles1) at ($(current page.north)+(2,-0.65\textwidth)$) {
+                \textbf{\hspace*{-1.5cm}Main principles}
+                \begin{itemize}
+                    \item[Branching:] Divide the search space
+                    \item[Bounding:] Test whether a region can contain optimal solutions 
+                    \item[Pruning:] Discard regions without optimal solutions
+                \end{itemize}
+            };
+        }
+    \end{tikzpicture}        
+\end{frame}
+
+\begin{frame}{Tree exploration}
+    \begin{tikzpicture}[remember picture,overlay]
+        \onslide<+-> {
+            \node at ($(current page.north)+(0,-0.35\textheight)$) (node0) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (node0) circle (15pt) node {\Large$N_0$};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node at ($(node0)+(-2,-1.5)$) (node1) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (node1) circle (15pt) node {\Large$N_1$};
+            \draw[ultra thick,->] ($(node0.south west)+(-0.25,-0.25)$) -- ($(node1.north east)+(0.25,0.25)$);
+            %
+            \node at ($(node0)+(2,-1.5)$) (node2) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (node2) circle (15pt) node {\Large$N_2$};
+            \draw[ultra thick,->] ($(node0.south east)+(0.25,-0.25)$) -- ($(node2.north west)+(-0.25,0.25)$);
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node (arrowcenter) at ($(node0)+(0,-5)$) {};
+            \draw[ultra thick,->] ($(arrowcenter)+(-5,0)$) -- ($(arrowcenter)+(5,0)$) node [above left, xshift=-2pt] {\small{value}};
+            \draw[fill] (arrowcenter) circle (2pt) node[below] (popt) {opt.};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \draw[fill,mLightBrown] ($(arrowcenter)+(1.5,0)$) circle (2pt) node (pub1) {};
+            \node<-4> [above] (pub1text) at (pub1) {\emphtwo{$\UB{\pobj}_1$}};
+            %
+            \draw[fill,mLightGreen] ($(arrowcenter)+(-2,0)$) circle (2pt) node (plb1) {};
+            \node<-4> [below] (plb1text) at (plb1) {\emphone{$\LB{\pobj}_1$}};
+            %
+            \draw[fill,mLightBrown] ($(arrowcenter)+(2,0)$) circle (2pt) node  (pub2) {};
+            \node<-4> [above] (pub2text) at (pub2) {\emphtwo{$\UB{\pobj}_2$}};
+            %
+            \draw[fill,mLightGreen] ($(arrowcenter)+(0.75,0)$) circle (2pt) node (plb2) {};
+            \node<-4> [below] (plb2text) at (plb2) {\emphone{$\LB{\pobj}_2$}};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node at ($(node1)+(-1,-1.5)$) (node3) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (node3) circle (15pt) node {\Large$N_3$};
+            \draw[ultra thick,->] ($(node1.south west)+(-0.25,-0.25)$) -- ($(node3.north)+(0.25,0.35)$);
+            \draw[ultra thick,->] ($(node3.south east)+(0.25,-0.25)$) -- ($(node3.south east)+(0.5,-0.5)$);
+            \draw[ultra thick,->] ($(node3.south west)+(-0.25,-0.25)$) -- ($(node3.south west)+(-0.5,-0.5)$);
+            %
+            \node at ($(node1)+(1,-1.5)$) (node4) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (node4) circle (15pt) node {\Large$N_4$};
+            \draw[ultra thick,->] ($(node1.south east)+(0.25,-0.25)$) -- ($(node4.north)+(-0.25,0.35)$);
+            \draw[ultra thick,->] ($(node4.south east)+(0.25,-0.25)$) -- ($(node4.south east)+(0.5,-0.5)$);
+            \draw[ultra thick,->] ($(node4.south west)+(-0.25,-0.25)$) -- ($(node4.south west)+(-0.5,-0.5)$);
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \draw[fill,mLightBrown] ($(arrowcenter)+(1,0)$) circle (2pt) node (pub3) {};
+            \node<-6> [above] (pub3text) at (pub3) {\emphtwo{$\UB{\pobj}_3$}};
+            %
+            \draw[fill,mLightGreen] ($(arrowcenter)+(-1,0)$) circle (2pt) node (plb3) {};
+            \node<-6> [below] (plb3text) at (plb3) {\emphone{$\LB{\pobj}_3$}};
+            %
+            \draw[fill,mLightBrown] ($(arrowcenter)+(3,0)$) circle (2pt) node (pub4) {};
+            \node<-6> [above] (pub4text) at (pub4) {\emphtwo{$\UB{\pobj}_4$}};
+            %
+            \draw[fill,mLightGreen] ($(arrowcenter)+(-3,0)$) circle (2pt) node (plb4) {};
+            \node<-6> [below] (plb5text) at (plb4) {\emphone{$\LB{\pobj}_4$}};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node at ($(node2)+(-1,-1.5)$) (node5) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (node5) circle (15pt) node {\Large$N_5$};
+            \draw[ultra thick,->] ($(node2.south west)+(-0.25,-0.25)$) -- ($(node5.north)+(0.25,0.35)$);
+            \node at ($(node2)+(1,-1.5)$) (node6) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (node6) circle (15pt) node {\Large$N_6$};
+            \draw[ultra thick,->] ($(node2.south east)+(0.25,-0.25)$) -- ($(node6.north)+(-0.25,0.35)$);
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \draw[fill,mLightGreen] ($(arrowcenter)+(1.75,0)$) circle (2pt) node[below] (plb5) {\emphone{$\LB{\pobj}_5$}};
+            \draw[fill,mLightGreen] ($(arrowcenter)+(2.75,0)$) circle (2pt) node[below] (plb6) {\emphone{$\LB{\pobj}_6$}};
+            \draw[ultra thick,<-,mLightBrown] ($(pub3)+(0,0.15)$) -- ($(pub3)+(0,0.6)$) node[above] {\small{Best UB}};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \draw[ultra thick,-{Circle[scale=0.5]}] ($(node5.south)+(0,-0.4)$) -- ($(node5.south)+(0,-0.6)$);
+            \draw[ultra thick,-{Circle[scale=0.5]}] ($(node6.south)+(0,-0.4)$) -- ($(node6.south)+(0,-0.6)$);
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[align=center] (convcrit1) at ($(current page.north)+(4,-2)$) {\small{All nodes explored}};
+            \node[align=center] (convcrit2) at ($(convcrit1)+(0,-0.3)$) {\small{or pruned}};
+            \node[align=center] (convres) at ($(convcrit2)+(0,-1)$) {\small{Problem solved}};
+            \draw[ultra thick,->] (convcrit2) -- (convres);
+        }
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Ingredients}
+    \begin{tikzpicture}[remember picture,overlay]
+        \node [text width=.45\textwidth] at ($(current page.north)+(0,-0.3\textheight)$) (problem) {
+            \begin{blockthree}{$\ell_0$-penalized problem}
+                \centering
+                $\min_{\pv} \ \datafunc(\pv) + \reg \norm{\pv}{0} + \regfunc(\pv)$
+            \end{blockthree}
+        };
+        \node [text width=\textwidth] at ($(current page.north)+(0,-0.65\textheight)$) (observations) {
+            \textbf{What do we need}
+            \begin{itemize}[label=$\blacktriangleright $]
+                \item A \emphtwo{branching} strategy
+                \item A \emphtwo{bounding} strategy
+                \item Something \emphtwo{generic} with respect to $\datafunc(\cdot)$ and $\regfunc(\cdot)$
+            \end{itemize}
+        };
+    \end{tikzpicture}
+\end{frame}

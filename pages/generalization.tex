@@ -1,0 +1,514 @@
+\section{Generic solution method}
+
+\begin{frame}{Branching}
+    \begin{tikzpicture}[remember picture,overlay]
+        \onslide<+-> {
+            \node at ($(current page.north)+(0,-0.35\textheight)$) (parent) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (parent) circle (15pt) node {\Large$\nodeSymbIter{}$};
+            \draw[ultra thick,->] ($(parent.north)+(0,0.75)$) -- ($(parent.north)+(0,0.4)$);
+            \node at ($(parent)+(0,1.25)$) (branchingrule) {\textbf{Force the (non-)nullity of an entry}};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node at ($(parent)+(-2,-2)$) (child0) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (child0) circle (15pt) node {\Large$\nodeSymbIter{}_0$};
+            \draw[ultra thick,->] ($(parent.south west)+(-0.25,-0.25)$) -- ($(child0.north east)+(0.25,0.25)$) node[midway,draw,fill=white] {$\pvi{\idxentry} = 0$};
+            \node at ($(parent)+(2,-2)$) (child1) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (child1) circle (15pt) node {\Large$\nodeSymbIter{}_1$};
+            \draw[ultra thick,->] ($(parent.south east)+(0.25,-0.25)$) -- ($(child1.north west)+(-0.25,0.25)$) node[midway,draw,fill=white] {$\pvi{\idxentry} \neq 0$};
+            \draw[ultra thick,->] ($(child0.south west)+(-0.25,-0.25)$) -- ($(child0.south west)+(-0.5,-0.5)$);
+            \draw[ultra thick,->] ($(child0.south east)+(0.25,-0.25)$) -- ($(child0.south east)+(0.5,-0.5)$);
+            \draw[ultra thick,->] ($(child1.south west)+(-0.25,-0.25)$) -- ($(child1.south west)+(-0.5,-0.5)$);
+            \draw[ultra thick,->] ($(child1.south east)+(0.25,-0.25)$) -- ($(child1.south east)+(0.5,-0.5)$);
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node at ($(parent)+(1.25,0)$) (parentsets) {$(\setzero,\setone)$};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node at ($(child0)+(-1.75,0)$) (child0sets) {$(\setzero\emphtwo{\cup\{\idxentry\}},\setone)$};
+            \node at ($(child1)+(1.75,0)$) (child1sets) {$(\setzero,\setone\emphtwo{\cup\{\idxentry\}})$};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=.5\textwidth] at ($(current page.north)+(0,-0.85\textheight)$) (nodeproblem) {
+                \begin{blockthree}{Node problem}
+                    \centering
+                    \small
+                    $
+                        \left\{
+                        \begin{array}{rl}
+                            \min_{\pv} & \datafunc(\pv) + \reg \norm{\pv}{0} + \regfunc(\pv) \\
+                            \text{s.t.} & \subzero{\pv} = \0, \ \subone{\pv} \neq \0
+                        \end{array}
+                        \right.
+                    $
+                \end{blockthree}
+            };
+        }
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Upper bounding}
+    \begin{tikzpicture}[remember picture,overlay]
+        \onslide<+-> {
+            \node at ($(current page.north)+(-4.5,-0.325\textheight)$) (node) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (node) circle (15pt) node {\Large$\nodeSymbIter{}_k$};
+            \draw[ultra thick,->] ($(node.north)+(0,0.75)$) -- ($(node.north)+(0,0.4)$);
+            \node at ($(node.south)+(0,-0.75)$) (nodesets) {$(\setzero,\setone)$};
+            \node[text width=.5\textwidth] at ($(current page.north)+(0,-0.3\textheight)$) (nodeproblem) {
+                \begin{blockthree}{Node problem}
+                    \centering
+                    \small
+                    $
+                        \left\{
+                        \begin{array}{rl}
+                            \min_{\pv} & \datafunc(\pv) + \reg \norm{\pv}{0} + \regfunc(\pv) \\
+                            \text{s.t.} & \subzero{\pv} = \0, \ \subone{\pv} \neq \0
+                        \end{array}
+                        \right.
+                    $
+                \end{blockthree}
+            };
+            \node at ($(nodeproblem.south)+(0,-0.25)$) (nodeproblemtext) {\small{Still NP-hard unless all entries are fixed}};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \draw[ultra thick,->] ($(nodeproblemtext.south)+(0,-0.1)$) -- ($(nodeproblemtext.south)+(0,-1.5)$) node[midway,draw,fill=white,font=\small] {Fix $\pvi{\idxentry}=0$ for all $\idxentry \notin \setone$};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=.5\textwidth] at ($(nodeproblemtext.south)+(0,-0.225\textheight)$) (ubproblem) {
+                \begin{blocktwo}{Upper bounding problem}
+                    \centering
+                    \small
+                    $\min_{\pv} \ \datafunc(\pv_{\setone}) + \reg \card{\setone} + \regfunc(\pv_{\setone})$
+                \end{blocktwo}
+            };
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node at ($(ubproblem.south)+(0,-0.25)$) (ubproblemtext1) {\small{Convex problem}};
+            \node at ($(ubproblemtext1.south)+(0,-0.15)$) (ubproblemtext2) {\small{Upper bound of good quality}};
+        }
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Lower bounding}
+    \begin{tikzpicture}[remember picture,overlay]
+        \onslide<+-> {
+            \node at ($(current page.north)+(-4.5,-0.325\textheight)$) (node) {};
+            \draw[
+                ultra thick,
+                top color = white,
+                bottom color = blue!30,
+            ] (node) circle (15pt) node {\Large$\nodeSymbIter{}_k$};
+            \draw[ultra thick,->] ($(node.north)+(0,0.75)$) -- ($(node.north)+(0,0.4)$);
+            \node at ($(node.south)+(0,-0.75)$) (nodesets) {$(\setzero,\setone)$};
+            \node[text width=.5\textwidth] at ($(current page.north)+(0,-0.3\textheight)$) (nodeproblem) {
+                \begin{blockthree}{Node problem}
+                    \centering
+                    \small
+                    $
+                        \left\{
+                        \begin{array}{rl}
+                            \min_{\pv} & \datafunc(\pv) + \reg \norm{\pv}{0} + \regfunc(\pv) \\
+                            \text{s.t.} & \subzero{\pv} = \0, \ \subone{\pv} \neq \0
+                        \end{array}
+                        \right.
+                    $
+                \end{blockthree}
+            };
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \draw[ultra thick,<-,purple] ($(nodeproblem.east)+(0.1,-0.1)$) .. controls ($(nodeproblem.east)+(0.75,-0.1)$) .. ($(nodeproblem.east)+(1,-0.5)$) node[font=\small,below] {\emphthree{$\min_{\pv}\pfunc(\pv)$}};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \draw[ultra thick,->] ($(nodeproblemtext.south)+(0,0.5)$) -- ($(nodeproblemtext.south)+(0,-0.9)$) node[midway,draw,fill=white,font=\small] {Use bi-conjugacy $\biconj{\pfunc}(\pv) \leq \pfunc(\pv)$};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=.5\textwidth] at ($(nodeproblem.south)+(0,-0.175\textwidth)$) (lbproblem) {
+                \begin{blockone}{Lower bounding problem}
+                    \centering
+                    \small
+                    $\min_{\pv} \biconj{\pfunc}(\pv)$
+                \end{blockone}
+            };
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[font=\small] (issue) at ($(lbproblem.south)+(0,-0.1\textwidth)$) {\textbf{Bi-conjugate computation is also NP-hard}};
+            \draw[ultra thick,->] ($(lbproblem.south)+(0,-0.05)$) -- ($(issue.north)+(0,+0.1)$);
+            \node at ($(issue)+(0,-0.75)$) {
+                \includegraphics[width=20pt]{imgs/dizzy.png}
+            };
+        }
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Lower bounding}
+    \begin{tikzpicture}[remember picture,overlay]
+        \onslide<+-> {
+            \node[anchor=west] (objective) at ($(current page.north)+(-5.5,-1.5)$) {\textbf{Our solution:} 
+            Compute the bi-conjugate of a \emphtwo{part} of the problem};
+            \node[text width=.5\textwidth] at ($(current page.north)+(0,-0.275\textwidth)$) (nodeproblem) {
+                \begin{blocksix}{Node problem}
+                    \centering
+                    \small
+                    $
+                        \left\{
+                        \begin{array}{rl}
+                            \min_{\pv} & \datafunc(\pv) + \emphtwo{\reg \norm{\pv}{0} + \regfunc(\pv)} \\
+                            \text{s.t.} & \emphtwo{\subzero{\pv} = \0, \ \subone{\pv} \neq \0}
+                        \end{array}
+                        \right.
+                    $
+                \end{blocksix}
+            };
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=.5\textwidth] at ($(nodeproblem)+(0,-0.3\textheight)$) (reformulation) {
+                \begin{blocksix}{}
+                    \small
+                    \centering
+                    $\min_{\pv} \ \datafunc(\pv) + \emphtwo{\pertfunc(\pv)}$
+                \end{blocksix}
+            };
+            \draw[ultra thick,->] (nodeproblem.south) -- ($(reformulation.north)+(0,-0.3)$) node[midway,ultra thick,draw,fill=white] {\scriptsize{Reformulation}};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=.5\textwidth] at ($(reformulation)+(0,-0.24\textheight)$) (relaxation) {
+                \begin{blocksix}{}
+                    \small
+                    \centering
+                    $\min_{\pv} \ \datafunc(\pv) + \emphtwo{\biconj{\pertfunc}(\pv)}$
+                \end{blocksix}
+            };
+            \draw[ultra thick,->] (reformulation.south) -- ($(relaxation.north)+(0,-0.3)$) node[midway,ultra thick,draw,fill=white] {\scriptsize{Bi-conjugacy}};
+            %
+            \node at ($(relaxation)+(0,-0.9)$) (lbproblemtext) {\small{Lower-bounding problem}};
+        }
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Lower bounding}
+    \begin{tikzpicture}[remember picture,overlay]
+        \onslide<+-> {
+            \node[text width=.62\textwidth] at ($(current page.north)+(0,-0.2\textheight)$) (fullexpr) {
+                \begin{blocksix}{}
+                    \small
+                    \centering
+                    $\pertfunc(\pv) = \reg\norm{\pv}{0} + \regfunc(\pv) + \Icvx(\subzero{\pv} = \0) + \Icvx(\subone{\pv} \neq \0)$
+                \end{blocksix}
+            };
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=.28\textwidth] at ($(fullexpr)+(0,-0.175\textwidth)$) (separable) {
+                \begin{blocksix}{}
+                    \small
+                    \centering
+                    $\biconj{\pertfunc}(\pv) = \sum_{\idxentry} \biconj{\separable{\pertfunc}{\idxentry}}(\pvi{\idxentry})$
+                \end{blocksix}
+            };
+            \draw[ultra thick,->] (fullexpr.south) -- ($(separable.north)+(0,-0.3)$) node[midway,draw,fill=white,font=\scriptsize] {Separable};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=.3\textwidth] at ($(separable)+(-4,-1.9)$) (biconjzero) {
+                \begin{blockone}{}
+                    \small
+                    \centering
+                    $\separable{\pertfunc}{\idxentry}(\pvi{\idxentry}) = \Icvx(\pvi{\idxentry} = 0)$
+                \end{blockone}
+            };
+            \draw[ultra thick,->] ($(separable.south west)+(-0.1,0.2)$) .. controls ($(separable.south west)+(-1.3,-0.1)$) .. ($(biconjzero.north east)+(-0.8,-0.3)$) node[midway,draw,fill=white,font=\scriptsize] {$\idxentry \in \setzero$};
+            \node[font=\scriptsize] at ($(biconjzero.south)+(0,-0.1)$) {\emphone{Already convex: $\separable{\biconj{\pertfunc}}{\idxentry}(\cdot) = \separable{\pertfunc}{\idxentry}(\cdot)$}};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=.3\textwidth] at ($(separable)+(4,-1.9)$) (biconjone) {
+                \begin{blockone}{}
+                    \small
+                    \centering
+                    $\separable{\pertfunc}{\idxentry}(\pvi{\idxentry}) = \reg + \separable{\regfunc}{\idxentry}(\pvi{\idxentry})$
+                \end{blockone}
+            };
+            \draw[ultra thick,->] ($(separable.south east)+(0.1,0.2)$) .. controls ($(separable.south east)+(1.3,-0.1)$) .. ($(biconjone.north west)+(0.8,-0.3)$) node[midway,draw,fill=white,font=\scriptsize] {$\idxentry \in \setone$};
+            \node[font=\scriptsize] at ($(biconjone.south)+(0,-0.1)$) {\emphone{Already convex: $\separable{\biconj{\pertfunc}}{\idxentry}(\cdot) = \separable{\pertfunc}{\idxentry}(\cdot)$}};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=.3\textwidth] at ($(separable)+(0,-1.9)$) (biconjnone) {
+                \begin{blocktwo}{}
+                    \small
+                    \centering
+                    $\separable{\pertfunc}{\idxentry}(\pvi{\idxentry}) = \reg\norm{\pvi{\idxentry}}{0} + \separable{\regfunc}{\idxentry}(\pvi{\idxentry})$
+                \end{blocktwo}
+            };
+            \draw[ultra thick,->] (separable.south) -- ($(biconjnone.north)+(0,-0.3)$) node[midway,draw,fill=white,font=\scriptsize] {$\idxentry$ unfixed};
+        }
+        %
+        %
+        %
+        \onslide<+-> {
+            \node[text width=.5\textwidth] at ($(biconjnone)+(0,-2.3)$) (closedform) {
+                \begin{blocksix}{}
+                    \small
+                    \centering
+                    $\separable{\biconj{\pertfunc}}{\idxentry}(\pvi{\idxentry}) = 
+                    \begin{cases}
+                        \emphtwo{\pertslope}\abs{\pvi{\idxentry}} & \text{if} \ \abs{\pvi{\idxentry}} \leq \emphtwo{\pertlimit} \\
+                        \reg + \separable{\regfunc}{\idxentry}(\pvi{\idxentry}) & \text{otherwise}
+                    \end{cases}$
+                \end{blocksix}
+            };
+            \draw[ultra thick,->] (biconjnone.south) -- ($(closedform.north)+(0,-0.3)$) node[midway,draw,fill=white,font=\scriptsize] {Closed form bi-conjugate};
+        }
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Lower bounding}
+    \newcommand{\pointsize}{0.03}
+    \begin{tikzpicture}[
+        remember picture,
+        overlay,
+        domain=-0.8:0.8,
+    ]
+        \onslide<+-> {
+            \node[text width=.5\textwidth] at ($(current page.north)+(0,-0.25\textwidth)$) (closedform) {
+                \begin{blocksix}{Graphical intuition}
+                    \small
+                    \centering
+                    $\separable{\biconj{\pertfunc}}{\idxentry}(\pvi{\idxentry}) = 
+                    \begin{cases}
+                        \emphtwo{\pertslope}\abs{\pvi{\idxentry}} & \text{if} \ \abs{\pvi{\idxentry}} \leq \emphtwo{\pertlimit} \\
+                        \reg + \separable{\regfunc}{\idxentry}(\pvi{\idxentry}) & \text{otherwise}
+                    \end{cases}$
+                \end{blocksix}
+            };
+        }
+        \begin{scope}[shift={(2,-3)},xscale=2.3,yscale=2.5]
+            \onslide<+-> {
+                \node (origin) at (0,0) {};
+                \draw[thick,->] (-1,0) -- (1, 0);
+                \draw[thick,->] (0,0) -- (0, 1);
+                \draw[thick] (-0.03,0.2) -- (0.03,0.2);
+                \node[above right] at (0,0.2) {$\reg$};
+                \node[right] at (1,0) {$\pv$};
+                \node[above] at (0,1) {\small\textcolor{teal}{$\pertfunc(\pv) = \reg\norm{\pv}{0} + \regfunc(\pv)$}};
+                \draw[thick,<-,teal] (0.5,1.2) .. controls (0.55,1.4) .. (0.7,1.4) node[right] {\small\textcolor{teal}{$\ell_2$-norm}};
+                \draw[{Arc Barb[arc=130,reversed]}-,teal,thick] (-0.5,0.2) plot[domain=0.03:0.8] (\x,0.2+\x^2);
+                \draw[-{Arc Barb[arc=130,reversed]},teal,thick] (-0.5,0.2) plot[domain=-0.8:-0.03] (\x,0.2-\x^2) node {};
+                \fill[teal] (0,0) circle (\pointsize);
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[densely dashed] (0, 0) -- (1, 0.86);
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \node[below] at (0.5,0) {\small{$\pertlimit$}};
+                \draw[densely dashed] (0.5,0) -- (0.5,0.42);
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \node[rotate=45,anchor=center] at (0.28,0.17) {\scriptsize{slope $\pertslope$}};
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[mLightBrown,thick] (0, 0) -- (0.5, 0.43);
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[mLightBrown,thick] (0.5, 0.43) plot[domain=0.5:0.8] (\x,0.2+\x^2-0.02) node {};
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[mLightBrown,thick] (0, 0) -- (-0.5, 0.43);
+                \draw[mLightBrown,thick] (-0.5, 0.43) plot[domain=-0.8:-0.5] (\x,0.2-\x^2-0.02) node {};
+                \fill[teal] (0,0) circle (\pointsize);
+                %
+                \draw[thick] (-0.5,-0.03) -- (-0.5,0.03);
+                \node[below] at (-0.5,0) {\small{$-\pertlimit$}};
+                \draw[thick] (0.5,-0.03) -- (0.5,0.03);
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[thick,<-,mLightBrown] (-0.2,0.14) .. controls (-0.2,-0.15) .. (-0.05,-0.2) node[right] {\small\emphtwo{$\biconj{\pertfunc}(\pv)$}};
+            }
+        \end{scope}
+        \begin{scope}[shift={(8,-3)},xscale=2.3,yscale=2.5]
+            \onslide<+-> {
+                \node (origin) at (0,0) {};
+                \draw[thick,->] (-1,0) -- (1, 0);
+                \draw[thick,->] (0,0) -- (0, 1);
+                \draw[thick] (-0.03,0.2) -- (0.03,0.2);
+                \node[above right] at (0,0.2) {$\reg$};
+                \node[right] at (1,0) {$\pv$};
+                \node[above] at (0,1) {\small\textcolor{teal}{$\pertfunc(\pv) = \reg\norm{\pv}{0} + \regfunc(\pv)$}};
+                %
+                \draw[thick,<-,teal] (0.5,1.2) .. controls (0.55,1.4) .. (0.7,1.4) node[right] {\small\textcolor{teal}{Bound cstr.}};
+                %
+                \draw[thick] (-0.03,0.7) -- (0.03,0.7);
+                \node[above right] at (0,0.7) {\small{$+\infty$}};
+                \draw[{Arc Barb[arc=130,reversed]}-,teal,thick] (-0.5,0.2) plot[domain=0.03:0.5] (\x,0.2);
+                \draw[-{Arc Barb[arc=130,reversed]},teal,thick] (-0.5,0.2) plot[domain=-0.5:-0.03] (\x,0.2) node {};
+                \fill[teal] (0,0) circle (\pointsize);
+                \fill[teal] (-0.5,0.2) circle (\pointsize);
+                \fill[teal] (0.5,0.2) circle (\pointsize);
+                \draw[{Arc Barb[arc=130,reversed]}-,teal,thick] (0.5,0.7) plot[domain=0.5:0.8] (\x,0.7);
+                \draw[-{Arc Barb[arc=130,reversed]},teal,thick] (-0.5,0.7) plot[domain=-0.8:-0.5] (\x,0.7);
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[densely dashed] (0, 0) -- (1, 0.4);
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[thick] (0.5,-0.03) -- (0.5,0.03);
+                \node[below] at (0.5,0) {\small{$\pertlimit$}};
+                \draw[densely dashed] (0.5,0) -- (0.5,0.2);
+                \node[rotate=25,anchor=center] at (0.8,0.25) {\scriptsize{slope $\pertslope$}};
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[mLightBrown,thick] (0, 0) -- (0.5, 0.2);
+                \fill[teal] (0,0) circle (\pointsize);
+                \fill[teal] (0.5,0.2) circle (\pointsize);
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[mLightBrown,thick] (0.53,0.69) -- (0.8,0.69);
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[mLightBrown,thick] (0, 0) -- (-0.5, 0.2);
+                \draw[mLightBrown,thick] (-0.53, 0.69) -- (-0.8, 0.69);
+                \draw[thick] (-0.5,-0.03) -- (-0.5,0.03);
+                \node[below] at (-0.5,0) {\small{$-\pertlimit$}};
+                \fill[teal] (0,0) circle (\pointsize);
+                \fill[teal] (-0.5,0.2) circle (\pointsize);
+            }
+            %
+            %
+            %
+            \onslide<+-> {
+                \draw[thick,<-,mLightBrown] (-0.2,0.07) .. controls (-0.2,-0.15) .. (-0.05,-0.2) node[right] {\small\emphtwo{$\biconj{\pertfunc}(\pv)$}};
+            }
+        \end{scope}
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Let's sum up !}
+    \begin{tikzpicture}[remember picture,overlay]
+        \onslide<+-> {
+            \node [text width=.45\textwidth] at ($(current page.north)+(0,-0.25\textheight)$) (problem) {
+                \begin{blockthree}{$\ell_0$-penalized problem}
+                    \centering
+                    $\min_{\pv} \ \datafunc(\pv) + \reg \norm{\pv}{0} + \regfunc(\pv)$
+                \end{blockthree}
+            };
+            \node [text width=\textwidth] at ($(current page.north)+(0,-0.7\textheight)$) (observations) {
+                \begin{itemize}[label=$\blacktriangleright$]
+                    \item Branch-and-Bound algorithm
+                    \item<+-> Branching strategy
+                    \begin{itemize}[label=$\bullet$]
+                    \item Fix the nullity of entries
+                    \end{itemize}
+                    \item<+-> Upper bounding problem
+                    \begin{itemize}[label=$\bullet$]
+                    \item Set all the unfixed entries to zero
+                    \item Convex problem 
+                    \end{itemize}
+                    \item<+-> Lower bounding problem
+                    \begin{itemize}[label=$\bullet$]
+                    \item Bi-conjugate of a part of the objective value 
+                    \item Closed-form expression
+                    \item Convex problem
+                    \end{itemize}
+                \end{itemize}
+            };
+        }
+    \end{tikzpicture}
+\end{frame}
